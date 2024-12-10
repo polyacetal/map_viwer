@@ -52,6 +52,12 @@ wails v2.9.2
 └── wails.json  
 現在のバージョンではマップを保存するディレクトリをユーザーが自由に設定できないため, mapsディレクトリに適宜保存しておく必要がある.  
 
+## 実行方法
+このプログラムを実行するには以下のコマンドを実行する.  
+```
+wails dev
+```
+
 ## About
 
 This is the official Wails React template.
