@@ -3,54 +3,54 @@
 これはU-16プログラミングコンテスト 競技部門 Chaser の map を表示するためのアプリケーションです.
 
 ## 開発環境
-macOs 15.1.1（24B91）
-node v22.5.1
-npm v10.9.1
-go v1.23.3
-wails v2.9.2
+macOS 15.1.1（24B91）  
+node v22.5.1  
+npm v10.9.1  
+go v1.23.3  
+wails v2.9.2  
  
 ### ディレクトリ構造
-このリポジトリは以下のようなディレクトリ構造となっている
-.
-├── README.md
-├── app.go
-├── build/
-├── frontend/
-│   ├── dist/
-│   ├── index.html
-│   ├── node_modules/
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── package.json.md5
-│   ├── src
-│   │   ├── App.css
-│   │   ├── App.jsx
-│   │   ├── assets
-│   │   │   ├── fonts
-│   │   │   │   ├── OFL.txt
-│   │   │   │   └── nunito-v16-latin-regular.woff2
-│   │   │   └── images
-│   │   │       ├── Block.png
-│   │   │       ├── Cool.png
-│   │   │       ├── Floor.png
-│   │   │       ├── Hot.png
-│   │   │       ├── Item.png
-│   │   │       └── logo-universal.png
-│   │   ├── main.jsx
-│   │   ├── style.css
-│   │   └── wailsjs/
-│   ├── vite.config.js
-│   └── wailsjs/
-├── go.mod
-├── go.sum
-├── hgoe.txt
-├── main.go
-├── maps/
-├── node_modules/
-├── package-lock.json
-├── package.json
-└── wails.json
-現在のバージョンではマップを保存するディレクトリをユーザーが自由に設定できないため, mapsディレクトリに適宜保存しておく必要がある.
+このリポジトリは以下のようなディレクトリ構造となっている  
+.  
+├── README.md  
+├── app.go  
+├── build/  
+├── frontend/  
+│   ├── dist/  
+│   ├── index.html  
+│   ├── node_modules/  
+│   ├── package-lock.json  
+│   ├── package.json  
+│   ├── package.json.md5  
+│   ├── src  
+│   │   ├── App.css  
+│   │   ├── App.jsx  
+│   │   ├── assets  
+│   │   │   ├── fonts  
+│   │   │   │   ├── OFL.txt  
+│   │   │   │   └── nunito-v16-latin-regular.woff2  
+│   │   │   └── images  
+│   │   │       ├── Block.png  
+│   │   │       ├── Cool.png  
+│   │   │       ├── Floor.png  
+│   │   │       ├── Hot.png  
+│   │   │       ├── Item.png  
+│   │   │       └── logo-universal.png  
+│   │   ├── main.jsx  
+│   │   ├── style.css  
+│   │   └── wailsjs/  
+│   ├── vite.config.js  
+│   └── wailsjs/  
+├── go.mod  
+├── go.sum  
+├── hgoe.txt  
+├── main.go  
+├── maps/  
+├── node_modules/  
+├── package-lock.json  
+├── package.json  
+└── wails.json  
+現在のバージョンではマップを保存するディレクトリをユーザーが自由に設定できないため, mapsディレクトリに適宜保存しておく必要がある.  
 
 ## About
 
