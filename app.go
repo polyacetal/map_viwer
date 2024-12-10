@@ -6,22 +6,28 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"io/ioutil"
 )
 
-// MapData 構造体
-type MapData struct {
-	Name          string     `json:"Name"`
-	RemainingTime int        `json:"RemainingTime"`
-	Size          [2]int     `json:"Size"`
-	Data          [][]int    `json:"Data"`
-	C             Coordinate `json:"C"`
-	H             Coordinate `json:"H"`
+// サイズを表す構造体
+type Size struct {
+	Rows int // 行数
+	Cols int // 列数
 }
 
-// Coordinate 構造体
+// マップデータ構造体
+type MapData struct {
+	Name           string       // マップ名
+	Time           int          // 残りタイム
+	Size           Size         // 行数と列数
+	Data           [][]int      // 2次元配列のデータ
+	Cool           Coordinate   // キャラクター1の座標
+	Hot            Coordinate   // キャラクター2の座標
+}
+
+// 座標を保持する構造体
 type Coordinate struct {
-	X int `json:"X"`
-	Y int `json:"Y"`
+	X, Y int
 }
 
 // App 構造体 (アプリケーションロジックをまとめる)
@@ -32,7 +38,7 @@ func NewApp() *App {
 	return &App{}
 }
 
-// GetMapData ファイルを読み込み、MapData構造体を返す関数
+// ファイルを読み込んでMapData構造体を生成する関数
 func (a *App) GetMapData(filePath string) (*MapData, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -48,31 +54,38 @@ func (a *App) GetMapData(filePath string) (*MapData, error) {
 		if strings.HasPrefix(line, "N:") {
 			mapData.Name = strings.TrimPrefix(line, "N:")
 		} else if strings.HasPrefix(line, "T:") {
-			mapData.RemainingTime, _ = strconv.Atoi(strings.TrimPrefix(line, "T:"))
+			mapData.Time, _ = strconv.Atoi(strings.TrimPrefix(line, "T:"))
 		} else if strings.HasPrefix(line, "S:") {
 			sizeData := strings.TrimPrefix(line, "S:")
 			sizes := strings.Split(sizeData, ",")
-			mapData.Size[0], _ = strconv.Atoi(sizes[0])
-			mapData.Size[1], _ = strconv.Atoi(sizes[1])
+			mapData.Size.Cols, _ = strconv.Atoi(sizes[0])
+			mapData.Size.Rows, _ = strconv.Atoi(sizes[1])
+			//mapData.Data = make([][]int, mapData.Size.Rows)
+			//for i := range mapData.Data {
+				//mapData.Data[i] = make([]int, mapData.Size.Cols)
+			//}
 		} else if strings.HasPrefix(line, "D:") {
 			dataLine := strings.TrimPrefix(line, "D:")
 			values := strings.Split(dataLine, ",")
 			row := []int{}
 			for _, val := range values {
-				num, _ := strconv.Atoi(val)
+				num, err := strconv.Atoi(val)
+				if err != nil {
+					return nil, fmt.Errorf("数値変換に失敗: %w", err)
+				}
 				row = append(row, num)
 			}
 			mapData.Data = append(mapData.Data, row)
 		} else if strings.HasPrefix(line, "C:") {
 			coordData := strings.TrimPrefix(line, "C:")
 			coords := strings.Split(coordData, ",")
-			mapData.C.X, _ = strconv.Atoi(coords[0])
-			mapData.C.Y, _ = strconv.Atoi(coords[1])
+			mapData.Cool.X, _ = strconv.Atoi(coords[0])
+			mapData.Cool.Y, _ = strconv.Atoi(coords[1])
 		} else if strings.HasPrefix(line, "H:") {
 			coordData := strings.TrimPrefix(line, "H:")
 			coords := strings.Split(coordData, ",")
-			mapData.H.X, _ = strconv.Atoi(coords[0])
-			mapData.H.Y, _ = strconv.Atoi(coords[1])
+			mapData.Hot.X, _ = strconv.Atoi(coords[0])
+			mapData.Hot.Y, _ = strconv.Atoi(coords[1])
 		}
 	}
 
@@ -81,4 +94,21 @@ func (a *App) GetMapData(filePath string) (*MapData, error) {
 	}
 
 	return &mapData, nil
+}
+
+func (a *App) GetMapList(directory string) ([]string, error) {
+	files, err := ioutil.ReadDir(directory)
+	if err != nil {
+		return nil, fmt.Errorf("ディレクトリの読み込みに失敗しました: %w", err)
+	}
+
+	// マップファイル一覧を格納
+	var mapFiles []string
+	for _, file := range files {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), ".map") {
+			mapFiles = append(mapFiles, file.Name())
+		}
+	}
+
+	return mapFiles, nil
 }

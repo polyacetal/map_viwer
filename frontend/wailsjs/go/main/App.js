@@ -5,3 +5,7 @@
 export function GetMapData(arg1) {
   return window['go']['main']['App']['GetMapData'](arg1);
 }
+
+export function GetMapList(arg1) {
+  return window['go']['main']['App']['GetMapList'](arg1);
+}

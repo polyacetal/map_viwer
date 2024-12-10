@@ -14,13 +14,27 @@ export namespace main {
 	        this.Y = source["Y"];
 	    }
 	}
+	export class Size {
+	    Rows: number;
+	    Cols: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Size(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.Rows = source["Rows"];
+	        this.Cols = source["Cols"];
+	    }
+	}
 	export class MapData {
 	    Name: string;
-	    RemainingTime: number;
-	    Size: number[];
+	    Time: number;
+	    Size: Size;
 	    Data: number[][];
-	    C: Coordinate;
-	    H: Coordinate;
+	    Cool: Coordinate;
+	    Hot: Coordinate;
 	
 	    static createFrom(source: any = {}) {
 	        return new MapData(source);
@@ -29,11 +43,11 @@ export namespace main {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.Name = source["Name"];
-	        this.RemainingTime = source["RemainingTime"];
-	        this.Size = source["Size"];
+	        this.Time = source["Time"];
+	        this.Size = this.convertValues(source["Size"], Size);
 	        this.Data = source["Data"];
-	        this.C = this.convertValues(source["C"], Coordinate);
-	        this.H = this.convertValues(source["H"], Coordinate);
+	        this.Cool = this.convertValues(source["Cool"], Coordinate);
+	        this.Hot = this.convertValues(source["Hot"], Coordinate);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
