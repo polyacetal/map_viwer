@@ -34,11 +34,17 @@ type Coordinate struct {
 
 // App 構造体 (アプリケーションロジックをまとめる)
 type App struct{
+	ctx context.Context
 }
 
 // NewApp App構造体のインスタンスを返す
 func NewApp() *App {
 	return &App{}
+}
+
+func (a * App) domready(ctx context.Context) {
+	fmt.Println("DOM が準備完了しました。アプリケーションが正常に起動しました。")
+	a.ctx = ctx
 }
 
 // ファイルを読み込んでMapData構造体を生成する関数
@@ -114,8 +120,8 @@ func (a *App) GetMapList(directory string) ([]string, error) {
 	return mapFiles, nil
 }
 
-func (a *App) SelectMapDirectory(ctx context.Context) (string, error) {
-	dirPath, err := runtime.OpenDirectoryDialog(ctx, runtime.OpenDialogOptions{
+func (a *App) SelectMapDirectory() (string, error) {
+	dirPath, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 		Title: "マップファイルが格納されているディレクトリを選択してください",
 	})
 

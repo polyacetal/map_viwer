@@ -10,6 +10,6 @@ export function GetMapList(arg1) {
   return window['go']['main']['App']['GetMapList'](arg1);
 }
 
-export function SelectMapDirectory(arg1) {
-  return window['go']['main']['App']['SelectMapDirectory'](arg1);
+export function SelectMapDirectory() {
+  return window['go']['main']['App']['SelectMapDirectory']();
 }
