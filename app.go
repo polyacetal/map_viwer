@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"io/ioutil"
+	"context"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // サイズを表す構造体
@@ -31,7 +33,8 @@ type Coordinate struct {
 }
 
 // App 構造体 (アプリケーションロジックをまとめる)
-type App struct{}
+type App struct{
+}
 
 // NewApp App構造体のインスタンスを返す
 func NewApp() *App {
@@ -60,10 +63,6 @@ func (a *App) GetMapData(filePath string) (*MapData, error) {
 			sizes := strings.Split(sizeData, ",")
 			mapData.Size.Cols, _ = strconv.Atoi(sizes[0])
 			mapData.Size.Rows, _ = strconv.Atoi(sizes[1])
-			//mapData.Data = make([][]int, mapData.Size.Rows)
-			//for i := range mapData.Data {
-				//mapData.Data[i] = make([]int, mapData.Size.Cols)
-			//}
 		} else if strings.HasPrefix(line, "D:") {
 			dataLine := strings.TrimPrefix(line, "D:")
 			values := strings.Split(dataLine, ",")
@@ -81,11 +80,13 @@ func (a *App) GetMapData(filePath string) (*MapData, error) {
 			coords := strings.Split(coordData, ",")
 			mapData.Cool.X, _ = strconv.Atoi(coords[0])
 			mapData.Cool.Y, _ = strconv.Atoi(coords[1])
+			mapData.Data[mapData.Cool.Y][mapData.Cool.X] = 4
 		} else if strings.HasPrefix(line, "H:") {
 			coordData := strings.TrimPrefix(line, "H:")
 			coords := strings.Split(coordData, ",")
 			mapData.Hot.X, _ = strconv.Atoi(coords[0])
 			mapData.Hot.Y, _ = strconv.Atoi(coords[1])
+			mapData.Data[mapData.Hot.Y][mapData.Hot.X] = 5
 		}
 	}
 
@@ -111,4 +112,20 @@ func (a *App) GetMapList(directory string) ([]string, error) {
 	}
 
 	return mapFiles, nil
+}
+
+func (a *App) SelectMapDirectory(ctx context.Context) (string, error) {
+	dirPath, err := runtime.OpenDirectoryDialog(ctx, runtime.OpenDialogOptions{
+		Title: "マップファイルが格納されているディレクトリを選択してください",
+	})
+
+	if err != nil {
+		return "", fmt.Errorf("ディレクトリの読み込みに失敗しました: %w", err)
+	}
+
+	if dirPath == "" {
+		return "", nil // ユーザーがキャンセルした場合
+	}
+
+	return dirPath, nil
 }

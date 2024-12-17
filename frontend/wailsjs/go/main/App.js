@@ -9,3 +9,7 @@ export function GetMapData(arg1) {
 export function GetMapList(arg1) {
   return window['go']['main']['App']['GetMapList'](arg1);
 }
+
+export function SelectMapDirectory(arg1) {
+  return window['go']['main']['App']['SelectMapDirectory'](arg1);
+}
